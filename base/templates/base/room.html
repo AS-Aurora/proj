@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'main.html' %}
+
+    {% block content %}
+    <h1>This is the room view</h1>
+    <p>Welcome to the room page!</p>
+    <p>Room ID: {{ room.id }}</p>
+    <p>Room Name: {{ room.name }}</p>
+    <p>Room Description: {{ room.description }}</p>
+    <p>Room Created: {{ room.created }}</p>
+    <p>Room Updated: {{ room.updated }}</p>
+    {% endblock %}
+</body>
+</html>
