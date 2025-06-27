@@ -7,8 +7,8 @@
 </head>
 <body>
     {% extends 'main.html' %}
+
     {% block content %}
-    <div>
         <form action="" method="POST">
             {% csrf_token %}
 
@@ -20,7 +20,6 @@
             <br>
             <button type="submit">Login</button>
         </form>
-    </div>
     {% endblock %}
 </body>
 </html>
