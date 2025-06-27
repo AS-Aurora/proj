@@ -22,6 +22,10 @@
             <a href="{% url 'room' room.id %}">{{ room.name }}</a>
             <br><br>
             <small>{{ room.topic.name }}</small>
+            <p>
+                <a href="{% url 'update-room' room.id %}">Edit</a>
+                <a href="{% url 'delete-room' room.id %}">Delete</a>
+            </p>
             <hr>
         </div>
     {% endfor %}

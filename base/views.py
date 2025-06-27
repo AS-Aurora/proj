@@ -15,7 +15,7 @@ def room(request, pk):
 
 def create_room(request):
     form = RoomForm()  # Initialize the form
-    
+
     if request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
@@ -23,3 +23,22 @@ def create_room(request):
         return redirect('home')
     context = {'form': form}
     return render(request, 'base/form.html', context)
+
+def update_room(request, pk):
+    room = Room.objects.get(id=UUID(pk))  # Fetch the room by its UUID
+    form = RoomForm(instance=room)  # Initialize the form with the room instance
+    if(request.method == 'POST'):
+        form = RoomForm(request.POST, instance=room)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    
+    context = {'form': form}
+    return render(request, 'base/form.html', context)
+
+def delete_room(request, pk):
+    room = Room.objects.get(id=UUID(pk))
+    if request.method == 'POST':
+        room.delete()
+        return redirect('home')
+    return render(request, 'base/delete.html', {'obj': room})
