@@ -6,9 +6,13 @@ from .forms import RoomForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.decorators import login_required
 
 
 def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -44,6 +48,7 @@ def room(request, pk):
     context = {'room': room}
     return render(request, 'base/room.html', context)
 
+@login_required(login_url='login')
 def create_room(request):
     form = RoomForm()  # Initialize the form
 
@@ -55,6 +60,7 @@ def create_room(request):
     context = {'form': form}
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
 def update_room(request, pk):
     room = Room.objects.get(id=UUID(pk))  # Fetch the room by its UUID
     form = RoomForm(instance=room)  # Initialize the form with the room instance
@@ -67,6 +73,7 @@ def update_room(request, pk):
     context = {'form': form}
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
 def delete_room(request, pk):
     room = Room.objects.get(id=UUID(pk))
     if request.method == 'POST':

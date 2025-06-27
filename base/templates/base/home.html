@@ -44,8 +44,12 @@
                 <small><strong>Topic:</strong> {{ room.topic.name }}</small>
                 <small><p>{{ room.description }}</p></small>
                 <p>
+                    {% if user.is_authenticated %}
+                    {% if room.host == user %}
                     <a href="{% url 'update-room' room.id %}">Edit</a>
                     <a href="{% url 'delete-room' room.id %}">Delete</a>
+                    {% endif %}
+                    {% endif %}
                 </p>
                 <hr>
             </div>
