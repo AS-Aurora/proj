@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,10 +7,14 @@
 </head>
 <body>
     <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'room' rooms.id %}">Room</a></li>
-        </ul>
+        <h1><a href="/">LOGO</a></h1>
+        
+        <form action="{% url 'home' %}" method="GET">
+            <input type="text" name="q" placeholder="Search...">
+            <button type="submit">Search</button>
+            
+        </form>
     </nav>
+    <hr>
 </body>
-</html> -->
+</html>

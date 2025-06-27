@@ -4,31 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .home-container {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+    </style>
 </head>
 <body>
     {% extends 'main.html' %}
 
     {% block content %}
-    <!-- {{ block.super }} -->
-    <h1>This is the home view</h1>
-    <p>Welcome to the home page!</p>
-    <p>Here you can find various rooms and their details.</p>
+    <div class="home-container">
 
-    <a href="{% url 'create-room' %}">Create Room</a>
-
-    {% for room in rooms %}
         <div>
-            <p>@{{ room.host.username }}</p>
-            <a href="{% url 'room' room.id %}">{{ room.name }}</a>
-            <br><br>
-            <small>{{ room.topic.name }}</small>
-            <p>
-                <a href="{% url 'update-room' room.id %}">Edit</a>
-                <a href="{% url 'delete-room' room.id %}">Delete</a>
-            </p>
+            <h3>Browse</h3>
             <hr>
+            <div>
+                <a href="{% url 'home' %}">All</a>
+            </div>
+            {% for topic in topics %}
+            <div>
+                <a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }}</a>
+            </div>
+            {% endfor %}
         </div>
-    {% endfor %}
+        
+        
+        <main>
+            <p>{{ room_count }} rooms found.</p>
+            <a href="{% url 'create-room' %}">Create Room</a>
+            
+            {% for room in rooms %}
+            <div>
+                <p><i>@{{ room.host.username }}</i></p>
+                <strong>Room name:</strong> <a href="{% url 'room' room.id %}">{{ room.name }}</a>
+                <br><br>
+                <small><strong>Topic:</strong> {{ room.topic.name }}</small>
+                <small><p>{{ room.description }}</p></small>
+                <p>
+                    <a href="{% url 'update-room' room.id %}">Edit</a>
+                    <a href="{% url 'delete-room' room.id %}">Delete</a>
+                </p>
+                <hr>
+            </div>
+            {% endfor %}
+        </main>
+    </div>
     {% endblock %}
 </body>
 </html>

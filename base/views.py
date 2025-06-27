@@ -1,11 +1,20 @@
 from django.shortcuts import render, redirect
-from .models import Room
+from django.db.models import Q
+from .models import Room, Topic
 from uuid import UUID
 from .forms import RoomForm
 
 def home(request):
-    rooms = Room.objects.all()  # Fetch all rooms from the database
-    context = {'rooms': rooms}
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    rooms = Room.objects.filter(
+        Q(topic__name__icontains=q) |  # Filter rooms by topic name
+        Q(description__icontains=q) |  # Filter rooms by description
+        Q(name__icontains=q) | # Filter rooms by name
+        Q(host__username__icontains=q)  # Filter rooms by host username
+        )  # Fetch all rooms from the database
+    room_count = rooms.count()  # Count the number of rooms
+    topics = Topic.objects.all()  # Fetch all topics from the database
+    context = {'rooms': rooms, 'topics': topics, 'room_count': room_count}
     return render(request, 'base/home.html', context)
 
 def room(request, pk):
