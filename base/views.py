@@ -73,3 +73,7 @@ def delete_room(request, pk):
         room.delete()
         return redirect('home')
     return render(request, 'base/delete.html', {'obj': room})
+
+def logoutUser(request):
+    logout(request)  # Log out the user
+    return redirect('home')  # Redirect to the home page
