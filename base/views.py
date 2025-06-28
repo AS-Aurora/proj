@@ -23,12 +23,12 @@ def loginPage(request):
         if user is None:
             messages.error(request, 'Username or password is incorrect')
             return redirect('login')  # Redirect to login page if authentication fails
-        else:
+        else:   
             login(request, user)
-            return redirect('home')
-        
-    context = {'page': 'login'}
+            link = request.GET.get('next') or request.POST.get('next')
+            return redirect(link if link else 'home')  # Redirect to the prev URL or home page
 
+    context = {'page': 'login'}
     return render(request, 'base/login.html', context)
 
 def registerPage(request):
@@ -44,7 +44,8 @@ def registerPage(request):
             user.username = user.username.lower()
             user.save()
             login(request, user)
-            return redirect('login')
+            link = request.GET.get('next') or request.POST.get('next')
+            return redirect(link if link else 'home')
         else:
             messages.error(request, 'An error occurred during registration')
 
@@ -70,7 +71,8 @@ def home(request):
 
 def room(request, pk):
     room = Room.objects.get(id=UUID(pk))  # Fetch the room by its UUID
-    context = {'room': room}
+    roomMessages = room.message_set.all().order_by('-created')  # Fetch all messages related to the room
+    context = {'room': room, 'roomMessages': roomMessages}
     return render(request, 'base/room.html', context)
 
 @login_required(login_url='login')
@@ -108,4 +110,5 @@ def delete_room(request, pk):
 
 def logoutUser(request):
     logout(request)  # Log out the user
-    return redirect('home')  # Redirect to the home page
+    link = request.GET.get('next') or request.POST.get('next')
+    return redirect(link if link else 'home')

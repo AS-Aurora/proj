@@ -12,6 +12,9 @@
         {% if page == 'login' %}
         <form action="" method="POST">
             {% csrf_token %}
+            {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
 
             <label>Username</label>
             <input type="text" name="username" required placeholder="Enter your username">
@@ -26,8 +29,11 @@
         
         {% else %}
 
-        <form action="" method="POST">
+        <form action="?next={{ request.GET.next }}" method="POST">
             {% csrf_token %}
+            {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
 
             {{ form.as_p }}
 
