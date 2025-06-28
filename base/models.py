@@ -16,7 +16,7 @@ class Room(models.Model):
     description = models.TextField(null=True, blank=True)
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)  # Foreign key to Topic, can be null
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  # Foreign key to User, can be null
-    # participants = 
+    participants = models.ManyToManyField(User, related_name='participants', blank=True)  # Many-to-many relationship with User
     updated = models.DateTimeField(auto_now=True) #this will update the timestamp whenever the model is saved
     created = models.DateTimeField(auto_now_add=True) #this will store the timestamp when it was first created
 
