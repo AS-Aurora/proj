@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from uuid import UUID
 from .forms import RoomForm
 from django.contrib.auth.models import User
@@ -72,6 +72,15 @@ def home(request):
 def room(request, pk):
     room = Room.objects.get(id=UUID(pk))  # Fetch the room by its UUID
     roomMessages = room.message_set.all().order_by('-created')  # Fetch all messages related to the room
+
+    if request.method == 'POST':
+        message = Message.objects.create(
+            user = request.user,
+            room = room,
+            body = request.POST.get('message')
+        )
+        return redirect('room', pk=room.id)
+
     context = {'room': room, 'roomMessages': roomMessages}
     return render(request, 'base/room.html', context)
 
