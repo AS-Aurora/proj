@@ -72,16 +72,18 @@ def home(request):
 def room(request, pk):
     room = Room.objects.get(id=UUID(pk))  # Fetch the room by its UUID
     roomMessages = room.message_set.all().order_by('-created')  # Fetch all messages related to the room
-
+    participants = room.participants.all()  # Fetch all participants in the room
     if request.method == 'POST':
         message = Message.objects.create(
             user = request.user,
             room = room,
             body = request.POST.get('message')
         )
+        room.participants.add(request.user)  # Add the user to the participants of the room
+        message.save()
         return redirect('room', pk=room.id)
 
-    context = {'room': room, 'roomMessages': roomMessages}
+    context = {'room': room, 'roomMessages': roomMessages, 'participants': participants}
     return render(request, 'base/room.html', context)
 
 @login_required(login_url='login')

@@ -4,39 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .room-container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+        }
+    </style>
 </head>
 <body>
     {% extends 'main.html' %}
 
     {% block content %}
     <a href="{% url 'home' %}">Back to Home</a>
+    <div class="room-container">
 
-    <h1>This is the room view</h1>
-    <p>Welcome to the room page!</p>
-    <p>Room ID: {{ room.id }}</p>
-    <p>Room Name: {{ room.name }}</p>
-    <p>Room Description: {{ room.description }}</p>
-    <p>Room Created: {{ room.created }}</p>
-    <p>Room Updated: {{ room.updated }}</p>
-
-    <h2>Conversation:</h2>
-        {% if user.is_authenticated %}
-        <form method="POST">
-            {% csrf_token %}
-            <textarea name="message" placeholder="Type your message here..." required style="width: 300px;"></textarea>
-            <button type="submit">Send</button>
-        </form>
-    {% else %}
-        <p>Please <a href="{% url 'login' %}">log in</a> to send messages.</p>
-    {% endif %}
-    <br>
-    {% for message in roomMessages %}
-        <div>
-            <p><strong>{{ message.user }}:</strong> {{ message.body }}</p>
-            <p><em>Sent at: {{ message.created|timesince }} ago</em></p>
+        <div >
+            
+            
+            <h1>This is the room view</h1>
+            <p>Welcome to the room page!</p>
+            <p>Room ID: {{ room.id }}</p>
+            <p>Room Name: {{ room.name }}</p>
+            <p>Room Description: {{ room.description }}</p>
+            <p>Room Created: {{ room.created }}</p>
+            <p>Room Updated: {{ room.updated }}</p>
+            
+            <h2>Conversation:</h2>
+            {% if user.is_authenticated %}
+            <form method="POST">
+                {% csrf_token %}
+                <textarea name="message" placeholder="Type your message here..." required style="width: 300px;"></textarea>
+                <button type="submit">Send</button>
+            </form>
+            {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> to send messages.</p>
+            {% endif %}
+            <br>
+            {% for message in roomMessages %}
+            <div>
+                <p><strong>{{ message.user }}:</strong> {{ message.body }}</p>
+                <p><em>Sent at: {{ message.created|timesince }} ago</em></p>
+            </div>
+            <hr>
+            {% endfor %}
         </div>
-        <hr>
-    {% endfor %}
+        
+        <div>
+            Participants:
+
+                {% for participant in participants %}
+                <div><em>@{{ participant.username }}</em></div>
+                <hr>
+                {% empty %}
+                <div>No participants yet.</div>
+                {% endfor %}
+        </div>
+    </div>
 
     {% endblock %}
 </body>
