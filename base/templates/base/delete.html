@@ -9,7 +9,11 @@
     {% extends 'main.html' %}
     {% block content %}
     <h1>Delete Room</h1>
-    <p>Are you sure you want to delete "{{obj}}"?</p>
+    {% if message %}
+    <p>Are you sure you want to delete the message "{{ message }}"?</p>
+    {% else %}
+    <p>Are you sure you want to delete "{{ obj }}"?</p>
+    {% endif %}
     <form method="POST">
         {% csrf_token %}
         <button type="submit">Confirm Delete</button>

@@ -126,7 +126,7 @@ def deleteMessage(request, pk):
         roomId = message.room.id
         message.delete()
         return redirect('room', pk=roomId)
-    return render(request, 'base/delete.html', {'obj': message})
+    return render(request, 'base/delete.html', {'message': message})
 
 def logoutUser(request):
     logout(request)  # Log out the user
