@@ -27,6 +27,7 @@ class Room(models.Model):
         return self.name
 
 class Message(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # Using UUID as primary key
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Foreign key to User, deletes messages if user is deleted
     room = models.ForeignKey(Room, on_delete=models.CASCADE)  # Foreign key to Room, deletes messages if room is deleted
     body = models.TextField()
