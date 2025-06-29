@@ -44,6 +44,9 @@
             <div>
                 <p><strong>{{ message.user }}:</strong> {{ message.body }}</p>
                 <p><em>Sent at: {{ message.created|timesince }} ago</em></p>
+                {% if user.is_authenticated and message.user == user %}
+                <a href="{% url 'deleteMessage' message.id  %}">Delete</a>
+                {% endif %}
             </div>
             <hr>
             {% endfor %}

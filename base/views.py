@@ -119,6 +119,15 @@ def delete_room(request, pk):
         return redirect('home')
     return render(request, 'base/delete.html', {'obj': room})
 
+@login_required(login_url='login')
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=UUID(pk))
+    if request.method == 'POST':
+        roomId = message.room.id
+        message.delete()
+        return redirect('room', pk=roomId)
+    return render(request, 'base/delete.html', {'obj': message})
+
 def logoutUser(request):
     logout(request)  # Log out the user
     link = request.GET.get('next') or request.POST.get('next')
