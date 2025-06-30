@@ -66,7 +66,10 @@ def home(request):
     
     room_count = rooms.count()  # Count the number of rooms
     topics = Topic.objects.all()  # Fetch all topics from the database
-    context = {'rooms': rooms, 'topics': topics, 'room_count': room_count, 'showSearchBar': True}
+
+    roomMessages = Message.objects.filter(Q(room__in=rooms)).order_by('-created')[:5]
+
+    context = {'rooms': rooms, 'topics': topics, 'room_count': room_count, 'showSearchBar': True, 'roomMessages': roomMessages}
     return render(request, 'base/home.html', context)
 
 def room(request, pk):
