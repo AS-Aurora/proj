@@ -19,6 +19,7 @@
         <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
         {% endif %}
         {% if user.is_authenticated %}
+        <p>Hello {{ user.username }}</p>
         <a href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
         {% endif %}
     </nav>
