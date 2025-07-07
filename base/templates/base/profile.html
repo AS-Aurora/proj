@@ -16,6 +16,12 @@
     {% extends 'main.html' %}
 
     {% block content %}
+    <h1>{{ profileUser.username }}'s Profile</h1>
+    <p>Joined on: {{ profileUser.date_joined }}</p>
+    {% if request.user == profileUser %}
+    <p><a href="{% url 'update-user' %}">Update Profile</a></p>
+    {% endif %}
+
     <div class="profile-container">
 
         
