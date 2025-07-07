@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from .models import Room, Topic, Message
 from uuid import UUID
-from .forms import RoomForm
+from .forms import RoomForm, UserForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout 
@@ -140,6 +140,19 @@ def userProfile(request, pk):
     roomMessages = profileUser.message_set.all().order_by('-created')[:5]
     topics = Topic.objects.all()
     return render(request, 'base/profile.html', {'profileUser': profileUser, 'rooms': rooms, 'roomMessages': roomMessages, 'topics': topics})
+
+@login_required(login_url='login')
+def updateUser(request):
+    form = UserForm(instance=request.user)  # Initialize the form with the current user instance
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance = request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=request.user.id)
+
+    context={'form': form}
+    return render(request, 'base/updateUser.html', context)
 
 
 def logoutUser(request):
