@@ -9,7 +9,7 @@
     <div>
         {% for room in rooms %}
             <div>
-                <p><i>@{{ room.host.username }}</i></p>
+                <a href="{% url 'user-profile' room.host.id %}"><i>@{{ room.host.username }}</i></a>
                 <strong>Room name:</strong> <a href="{% url 'room' room.id %}">{{ room.name }}</a>
                 <br><br>
                 <small><strong>Topic:</strong> {{ room.topic.name }}</small>

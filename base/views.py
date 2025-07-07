@@ -96,8 +96,10 @@ def create_room(request):
     if request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
-            form.save()
-        return redirect('home')
+            room = form.save(commit=False)  # Create a room instance without saving it to the database yet
+            room.host = request.user  # Set the host of the room to the current user
+            room.save()  # Save the room instance
+            return redirect('home')
     context = {'form': form}
     return render(request, 'base/form.html', context)
 
@@ -130,6 +132,15 @@ def deleteMessage(request, pk):
         message.delete()
         return redirect('room', pk=roomId)
     return render(request, 'base/delete.html', {'message': message})
+
+# @login_required(login_url='login')
+def userProfile(request, pk):
+    profileUser = User.objects.get(id=pk)
+    rooms = profileUser.room_set.all()
+    roomMessages = profileUser.message_set.all().order_by('-created')[:5]
+    topics = Topic.objects.all()
+    return render(request, 'base/profile.html', {'profileUser': profileUser, 'rooms': rooms, 'roomMessages': roomMessages, 'topics': topics})
+
 
 def logoutUser(request):
     logout(request)  # Log out the user
